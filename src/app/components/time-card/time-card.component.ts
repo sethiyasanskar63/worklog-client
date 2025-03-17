@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TimeCard } from '../../domain/time-card.model';
 
 @Component({
   selector: 'app-time-card',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './time-card.component.html',
   styleUrl: './time-card.component.scss'
 })
-export class TimeCardComponent {
-
+export class DisplayComponent {
+  @Input() data?: TimeCard;
 }

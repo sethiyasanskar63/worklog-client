@@ -1,1 +1,28 @@
-<p>form works!</p>
+<form (submit)="onSubmit($event)">
+    <div>
+        <label for="ticketId">Ticket Id:</label>
+        <mat-form-field appearance="fill">
+            <input type="text" 
+                   matInput 
+                   [formControl]="ticketIdControl" 
+                   id="ticketId" 
+                   placeholder="Select or type a ticket ID" 
+                   [matAutocomplete]="auto" 
+                   required>
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredTicketOptions | async" [value]="option">
+                    {{option}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+    <div>
+        <label for="date">Date:</label>
+        <input type="date" id="date" [formControl]="dateControl" required>
+    </div>
+    <div>
+        <label for="timeSpent">Time Spent:</label>
+        <input type="text" id="timeSpent" [formControl]="timeSpentControl" required>
+    </div>
+    <button type="submit">Submit</button>
+</form>

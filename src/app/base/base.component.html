@@ -1,1 +1,2 @@
-<p>base works!</p>
+<app-ticket-form (formDataSubmitted)="handleTicketFormSubmit($event)"></app-ticket-form>
+<app-form [tickets]="tickets" (formDataSubmitted)="handleFormSubmit($event)"></app-form>
