@@ -67,6 +67,7 @@ export class BaseComponent implements OnInit {
       next: (response: Ticket) => {
         this.ticketData = response;
         this.loading = false;
+        this.fetchAllTickets();
       },
       error: (err) => {
         console.error('Error submitting form data:', err);

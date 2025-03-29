@@ -1,27 +1,37 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Ticket } from '../../domain/ticket.model';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-ticket-form',
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule
+  ],
   templateUrl: './ticket-form.component.html',
   styleUrl: './ticket-form.component.scss'
 })
 export class TicketFormComponent {
   @Output() formDataSubmitted = new EventEmitter<Ticket>();
 
+  nameControl = new FormControl('');
+  descriptionControl = new FormControl('');
+
   onSubmit(event: Event) {
     event.preventDefault();
-    const form = event.target as HTMLFormElement;
-    const formData = new FormData(form);
-
+    
     const data: Ticket = {
-        name: formData.get('name') as string,
-        description: formData.get('description') as string
+      name: this.nameControl.value || '',
+      description: this.descriptionControl.value || ''
     };
 
     this.formDataSubmitted.emit(data);
-    form.reset();
+    this.nameControl.reset();
+    this.descriptionControl.reset();
   }
 }

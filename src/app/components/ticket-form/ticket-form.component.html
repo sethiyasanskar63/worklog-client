@@ -1,10 +1,14 @@
 <form (submit)="onSubmit($event)">
     <div>
-        <label for="name">Ticket Name:</label>
-        <input type="text" id="name" name="name" required>
+        <mat-form-field appearance="fill">
+            <mat-label>Ticket Name</mat-label>
+            <input matInput [formControl]="nameControl" required>
+        </mat-form-field>
 
-        <label for="description">Ticket Description:</label>
-        <input type="text" id="description" name="description" required>
+        <mat-form-field appearance="fill">
+            <mat-label>Ticket Description</mat-label>
+            <input matInput [formControl]="descriptionControl" required>
+        </mat-form-field>
     </div>
-    <button type="submit">Submit</button>
+    <button type="submit" mat-raised-button color="primary">Submit Ticket</button>
 </form>

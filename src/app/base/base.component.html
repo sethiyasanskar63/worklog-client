@@ -1,2 +1,9 @@
-<app-ticket-form (formDataSubmitted)="handleTicketFormSubmit($event)"></app-ticket-form>
-<app-form [tickets]="tickets" (formDataSubmitted)="handleFormSubmit($event)"></app-form>
+<div class="form-section">
+    <h2>Create New Ticket</h2>
+    <app-ticket-form (formDataSubmitted)="handleTicketFormSubmit($event)"></app-ticket-form>
+</div>
+
+<div class="form-section">
+    <h2>Log Time</h2>
+    <app-form [tickets]="tickets" (formDataSubmitted)="handleFormSubmit($event)"></app-form>
+</div>
