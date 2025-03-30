@@ -25,7 +25,7 @@ import { Ticket } from '../../domain/ticket.model';
 })
 export class FormComponent implements OnInit, OnChanges {
   @Output() formDataSubmitted = new EventEmitter<TimeCard>();
-  @Input() tickets: Ticket[] = []; // Add this to receive tickets from parent
+  @Input() tickets: Ticket[] | { content: Ticket[] } = [];
   
   ticketIdControl = new FormControl('');
   dateControl = new FormControl('');
@@ -51,10 +51,17 @@ export class FormComponent implements OnInit, OnChanges {
   }
 
   private updateTicketOptions() {
-    // Format tickets for display
-    this.ticketOptions = this.tickets
-      .filter(ticket => ticket.ticketId !== undefined)
-      .map(ticket => `${ticket.ticketId} - ${ticket.name || 'Unnamed'}`);
+    if (Array.isArray(this.tickets)) {
+      this.ticketOptions = this.tickets
+        .filter(ticket => ticket.ticketId !== undefined)
+        .map(ticket => `${ticket.ticketId} - ${ticket.name || 'Unnamed'}`);
+    } else if (this.tickets && Array.isArray(this.tickets.content)) {
+      this.ticketOptions = this.tickets.content
+        .filter(ticket => ticket.ticketId !== undefined)
+        .map(ticket => `${ticket.ticketId} - ${ticket.name || 'Unnamed'}`);
+    } else {
+      this.ticketOptions = [];
+    }
   }
 
   private setupFilteredOptions() {
@@ -74,22 +81,14 @@ export class FormComponent implements OnInit, OnChanges {
   onSubmit(event: Event) {
     event.preventDefault();
     
-    // Extract ticket ID from selection (handles both formats: "ID - Name" or just "ID")
-    const ticketIdValue = this.ticketIdControl.value || '';
-    let ticketId: number;
-    
-    if (ticketIdValue.includes('-')) {
-      // Extract ID part from "ID - Name" format
-      ticketId = Number(ticketIdValue.split('-')[0].trim());
-    } else {
-      // Just a plain ID
-      ticketId = Number(ticketIdValue);
-    }
-    
+    const selectedTicket = this.tickets instanceof Array
+      ? this.tickets.find(ticket => `${ticket.ticketId} - ${ticket.name || 'Unnamed'}` === this.ticketIdControl.value)
+      : this.tickets?.content?.find(ticket => `${ticket.ticketId} - ${ticket.name || 'Unnamed'}` === this.ticketIdControl.value);
+
     const data: TimeCard = {
       date: new Date(this.dateControl.value || ''),
       timeSpent: Number(this.timeSpentControl.value),
-      ticketId: ticketId
+      ticket: selectedTicket || undefined
     };
 
     this.formDataSubmitted.emit(data);
