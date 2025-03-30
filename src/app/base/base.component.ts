@@ -5,10 +5,12 @@ import { TimeCardService } from '../services/time-card.service';
 import { TicketService } from '../services/ticket.service';
 import { TicketFormComponent } from "../components/ticket-form/ticket-form.component";
 import { Ticket } from '../domain/ticket.model';
+import { TimeCardComponent } from "../components/time-card/time-card.component";
+import { Page } from '../domain/page.model';
 
 @Component({
   selector: 'app-base',
-  imports: [FormComponent, TicketFormComponent],
+  imports: [FormComponent, TicketFormComponent, TimeCardComponent],
   templateUrl: './base.component.html',
   styleUrl: './base.component.scss'
 })
@@ -16,6 +18,7 @@ export class BaseComponent implements OnInit {
   data?: TimeCard;
   ticketData?: Ticket;
   tickets: Ticket[] = [];
+  timeCards: TimeCard[] = [];
   error: string = '';
   loading: boolean = false;
 
@@ -23,19 +26,43 @@ export class BaseComponent implements OnInit {
   
   ngOnInit(): void {
     this.fetchAllTickets();
+    this.fetchAllTimeCards();
   }
 
   fetchAllTickets(): void {
     this.loading = true;
     this.ticketService.getAllTickets().subscribe({
       next: (tickets: Ticket[]) => {
-        this.tickets = tickets;
+        this.tickets = tickets || [];
         this.loading = false;
       },
       error: (err) => {
         console.error('Error fetching tickets:', err);
         this.error = 'Failed to fetch tickets. Please try again.';
         this.loading = false;
+        this.tickets = [];
+      }
+    });
+  }
+  
+  fetchAllTimeCards(): void {
+    this.loading = true;
+    this.timeCardService.getAllTimeCards().subscribe({
+      next: (response: Page<TimeCard>) => {
+        console.log('API Response:', response);
+        if (response && response.content) {
+          this.timeCards = response.content;
+        } else {
+          this.timeCards = [];
+          console.warn('Expected page format not received from API');
+        }
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching time cards:', err);
+        this.error = 'Failed to fetch time cards. Please try again.';
+        this.loading = false;
+        this.timeCards = [];
       }
     });
   }
@@ -49,6 +76,7 @@ export class BaseComponent implements OnInit {
       next: (response: TimeCard) => {
         this.data = response;
         this.loading = false;
+        this.fetchAllTimeCards();
       },
       error: (err) => {
         console.error('Error submitting form data:', err);

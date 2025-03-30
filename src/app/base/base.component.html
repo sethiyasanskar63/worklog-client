@@ -7,3 +7,19 @@
     <h2>Log Time</h2>
     <app-form [tickets]="tickets" (formDataSubmitted)="handleFormSubmit($event)"></app-form>
 </div>
+
+<div class="form-section">
+    <h2>Time Cards</h2>
+    @if (loading) {
+        <div>Loading time cards...</div>
+    }
+    @if (error) {
+        <div class="error-message">{{ error }}</div>
+    }
+    @if (timeCards.length === 0 && !loading) {
+        <div class="no-data-message">No time cards found.</div>
+    }
+    @for (timeCard of timeCards; track timeCard.timeCardId) {
+        <app-time-card [data]="timeCard"></app-time-card>
+    }
+</div>

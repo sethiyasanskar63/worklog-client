@@ -9,6 +9,6 @@ import { TimeCard } from '../../domain/time-card.model';
   templateUrl: './time-card.component.html',
   styleUrl: './time-card.component.scss'
 })
-export class DisplayComponent {
+export class TimeCardComponent {
   @Input() data?: TimeCard;
 }

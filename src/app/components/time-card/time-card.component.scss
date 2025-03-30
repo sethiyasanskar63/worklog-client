@@ -5,4 +5,28 @@ div {
 label {
     font-weight: bold;
     margin-right: 5px;
+    min-width: 100px;
+    display: inline-block;
+}
+
+.time-card {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.card-field {
+    margin-bottom: 10px;
+}
+
+.ticket-section {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed #ccc;
+    
+    h4 {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
 }

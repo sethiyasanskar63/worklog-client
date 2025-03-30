@@ -1,22 +1,25 @@
-<div *ngIf="data">
-    <div>
-        <label>Field 1:</label>
-        <span>{{ data.field1 }}</span>
+<div *ngIf="data" class="time-card">
+    <div class="card-field">
+        <label>Date:</label>
+        <span>{{ data.date | date:'mediumDate' }}</span>
     </div>
-    <div>
-        <label>Field 2:</label>
-        <span>{{ data.field2 }}</span>
+    <div class="card-field">
+        <label>Time Spent:</label>
+        <span>{{ data.timeSpent }} hours</span>
     </div>
-    <div>
-        <label>Field 3:</label>
-        <span>{{ data.field3 }}</span>
-    </div>
-    <div>
-        <label>Field 4:</label>
-        <span>{{ data.field4 }}</span>
-    </div>
-    <div>
-        <label>Field 5:</label>
-        <span>{{ data.field5 }}</span>
+    <div *ngIf="data.ticket" class="ticket-section">
+        <h4>Ticket Information</h4>
+        <div class="card-field">
+            <label>Ticket ID:</label>
+            <span>{{ data.ticket.ticketId}}</span>
+        </div>
+        <div class="card-field">
+            <label>Ticket Name:</label>
+            <span>{{ data.ticket.name }}</span>
+        </div>
+        <div class="card-field">
+            <label>Ticket Description:</label>
+            <span>{{ data.ticket.description }}</span>
+        </div>
     </div>
 </div>
