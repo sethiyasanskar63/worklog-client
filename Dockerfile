@@ -1,18 +1,19 @@
-# Use Node.js to build the Angular app
 FROM node:20 AS build-stage
 
 WORKDIR /app
 
 # Copy package files and install dependencies (leveraging Docker cache)
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --prefer-offline --no-audit --progress=false
+
+# Install Angular CLI globally
+RUN npm install -g @angular/cli@latest --prefer-offline --no-audit --progress=false
 
 # Copy source code and build the app
 COPY . .
 RUN npm run build --configuration=production
 
-# Use Nginx to serve the built Angular app
-FROM nginx:alpine
+FROM nginx:1.25.2-alpine
 
 # Create nginx configuration for Angular SPA routing
 RUN echo 'server { \
