@@ -1,28 +1,57 @@
-<form (submit)="onSubmit($event)">
-    <div>
-        <label for="ticketId">Ticket Id:</label>
-        <mat-form-field appearance="fill">
-            <input type="text" 
-                   matInput 
-                   [formControl]="ticketIdControl" 
-                   id="ticketId" 
-                   placeholder="Select or type a ticket ID" 
-                   [matAutocomplete]="auto" 
-                   required>
-            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+<form [formGroup]="timeForm" (ngSubmit)="onSubmit($event)" class="ticket-form">
+    <div class="form-container">
+
+        <!-- Ticket ID Field -->
+        <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Ticket ID</mat-label>
+            <input matInput placeholder="Select or type a ticket ID" formControlName="ticketId" [matAutocomplete]="auto"
+                required />
+            <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption>
                 <mat-option *ngFor="let option of filteredTicketOptions | async" [value]="option">
-                    {{option}}
+                    {{ option }}
                 </mat-option>
             </mat-autocomplete>
+            <mat-error
+                *ngIf="timeForm.get('ticketId')?.invalid && (timeForm.get('ticketId')?.dirty || timeForm.get('ticketId')?.touched)">
+                <div *ngIf="timeForm.get('ticketId')?.errors?.['required']" class="error-message">
+                    Ticket ID is required.
+                </div>
+            </mat-error>
         </mat-form-field>
+
+        <!-- Date Field with Datepicker -->
+        <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date" [max]=today required />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+
+            <mat-error
+                *ngIf="timeForm.get('date')?.invalid && (timeForm.get('date')?.dirty || timeForm.get('date')?.touched)">
+                <div *ngIf="timeForm.get('date')?.errors?.['required']" class="error-message">
+                    Date is required.
+                </div>
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Time Spent Field -->
+        <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Time Spent (e.g. 2h 30m)</mat-label>
+            <input matInput type="text" formControlName="timeSpent" required />
+            <mat-error
+                *ngIf="timeForm.get('timeSpent')?.invalid && (timeForm.get('timeSpent')?.dirty || timeForm.get('timeSpent')?.touched)">
+                <div *ngIf="timeForm.get('timeSpent')?.errors?.['required']" class="error-message">
+                    Time spent is required.
+                </div>
+                <div *ngIf="timeForm.get('timeSpent')?.errors?.['pattern']" class="error-message">
+                    Enter time in format like "1h 30m", "45m", or "2h".
+                </div>
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Submit Button -->
+        <div class="submit-container">
+            <button type="submit" class="submit-button" [disabled]="timeForm.invalid">Submit</button>
+        </div>
     </div>
-    <div>
-        <label for="date">Date:</label>
-        <input type="date" id="date" [formControl]="dateControl" required>
-    </div>
-    <div>
-        <label for="timeSpent">Time Spent:</label>
-        <input type="text" id="timeSpent" [formControl]="timeSpentControl" required>
-    </div>
-    <button type="submit">Submit</button>
 </form>

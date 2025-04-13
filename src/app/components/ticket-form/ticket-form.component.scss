@@ -1,29 +1,88 @@
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-div {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-mat-form-field {
+/* General Form Styles */
+.ticket-form {
     width: 100%;
-}
-
-button {
-    padding: 10px;
-    background-color: #007bff;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-field {
+    margin-bottom: 20px; /* Space between fields */
+  }
+  
+  mat-form-field {
+    width: 100%;
+  }
+  
+  mat-error {
+    font-size: 0.875rem;
+    color: #d32f2f; /* Red color for error messages */
+    margin-top: -10px;
+    font-style: italic;
+  }
+  
+  /* Input Fields Styling */
+  input.mat-input-element {
+    padding: 12px 16px;
+    font-size: 1rem;
+    border-radius: 4px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  input.mat-input-element:focus {
+    border-color: #3f51b5; /* Blue color on focus */
+  }
+  
+  /* Styling for Invalid Inputs */
+  .mat-form-field.ng-invalid .mat-input-element {
+    border: 2px solid #d32f2f; /* Red border for invalid fields */
+  }
+  
+  .mat-form-field.ng-valid .mat-input-element {
+    border: 2px solid #4caf50; /* Green border for valid fields */
+  }
+  
+  /* Submit Button Styling */
+  .submit-container {
+    text-align: center;
+  }
+  
+  .submit-button {
+    background-color: #3f51b5; /* Material blue */
     color: white;
+    padding: 12px 24px;
+    font-size: 1rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
+    transition: background-color 0.3s ease;
+    width: 100%;
+  }
+  
+  .submit-button:disabled {
+    background-color: #dcdcdc; /* Disabled button */
+    cursor: not-allowed;
+  }
+  
+  .submit-button:hover:not(:disabled) {
+    background-color: #303f9f; /* Darker blue on hover */
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .ticket-form {
+      padding: 15px;
+    }
+    .submit-button {
+      padding: 10px 20px;
+    }
+  }
+  
