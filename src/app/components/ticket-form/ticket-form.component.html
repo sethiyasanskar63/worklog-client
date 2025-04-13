@@ -1,14 +1,32 @@
-<form (submit)="onSubmit($event)">
-    <div>
-        <mat-form-field appearance="fill">
+<form [formGroup]="ticketForm" (ngSubmit)="onSubmit($event)" class="ticket-form">
+    <div class="form-container">
+        <!-- Ticket Name Input Field -->
+        <mat-form-field appearance="fill" class="form-field">
             <mat-label>Ticket Name</mat-label>
-            <input matInput [formControl]="nameControl" required>
+            <input matInput formControlName="name" placeholder="Enter the ticket name" required>
+            <mat-error
+                *ngIf="ticketForm.get('name')?.invalid && (ticketForm.get('name')?.dirty || ticketForm.get('name')?.touched)">
+                <div *ngIf="ticketForm.get('name')?.errors?.['required']" class="error-message">
+                    Name is required.
+                </div>
+            </mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <!-- Ticket Description Input Field -->
+        <mat-form-field appearance="fill" class="form-field">
             <mat-label>Ticket Description</mat-label>
-            <input matInput [formControl]="descriptionControl" required>
+            <input matInput formControlName="description" placeholder="Enter the description" required>
+            <mat-error
+                *ngIf="ticketForm.get('description')?.invalid && (ticketForm.get('description')?.dirty || ticketForm.get('description')?.touched)">
+                <div *ngIf="ticketForm.get('description')?.errors?.['required']" class="error-message">
+                    Description is required.
+                </div>
+            </mat-error>
         </mat-form-field>
+
+        <!-- Submit Button -->
+        <div class="submit-container">
+            <button type="submit" class="submit-button" [disabled]="ticketForm.invalid">Submit Ticket</button>
+        </div>
     </div>
-    <button type="submit">Submit Ticket</button>
 </form>

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Ticket } from '../../domain/ticket.model';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
@@ -21,7 +21,17 @@ export class TicketFormComponent {
 
   nameControl = new FormControl('');
   descriptionControl = new FormControl('');
+  ticketForm: FormGroup;
 
+
+  constructor(private fb: FormBuilder) {
+    // Initialize ticketForm in the constructor
+    this.ticketForm = this.fb.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+    });
+  }
+  
   onSubmit(event: Event) {
     event.preventDefault();
     
