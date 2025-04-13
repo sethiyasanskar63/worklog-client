@@ -36,8 +36,8 @@ export class TicketFormComponent {
     event.preventDefault();
     
     const data: Ticket = {
-      name: this.nameControl.value || '',
-      description: this.descriptionControl.value || ''
+      name: this.ticketForm.get('name')?.value || '',
+      description: this.ticketForm.get('description')?.value || ''
     };
 
     this.formDataSubmitted.emit(data);
