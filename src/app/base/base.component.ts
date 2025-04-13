@@ -7,10 +7,12 @@ import { TicketFormComponent } from "../components/ticket-form/ticket-form.compo
 import { Ticket } from '../domain/ticket.model';
 import { TimeCardComponent } from "../components/time-card/time-card.component";
 import { Page } from '../domain/page.model';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-base',
-  imports: [FormComponent, TicketFormComponent, TimeCardComponent],
+  imports: [FormComponent, TicketFormComponent, TimeCardComponent, MatSlideToggleModule, CommonModule],
   templateUrl: './base.component.html',
   styleUrl: './base.component.scss'
 })
@@ -21,9 +23,10 @@ export class BaseComponent implements OnInit {
   timeCards: TimeCard[] = [];
   error: string = '';
   loading: boolean = false;
+  isDarkMode: boolean = false;
 
   constructor(private timeCardService: TimeCardService, private ticketService: TicketService) { }
-  
+
   ngOnInit(): void {
     this.fetchAllTickets();
     this.fetchAllTimeCards();
@@ -44,7 +47,7 @@ export class BaseComponent implements OnInit {
       }
     });
   }
-  
+
   fetchAllTimeCards(): void {
     this.loading = true;
     this.timeCardService.getAllTimeCards().subscribe({
@@ -66,7 +69,7 @@ export class BaseComponent implements OnInit {
       }
     });
   }
-  
+
   handleFormSubmit(formData: TimeCard) {
     this.loading = true;
     this.error = '';
@@ -104,4 +107,17 @@ export class BaseComponent implements OnInit {
       }
     });
   }
+
+  toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+    const body = document.body;
+    if (this.isDarkMode) {
+      body.classList.add('dark-theme');
+      console.log('Dark mode enabled');
+    } else {
+      body.classList.remove('dark-theme');
+      console.log('Dark mode disabled');
+    }
+  }
+
 }
