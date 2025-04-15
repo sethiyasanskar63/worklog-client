@@ -31,15 +31,13 @@ export class FormComponent implements OnInit, OnChanges {
   @Output() formDataSubmitted = new EventEmitter<TimeCard>();
   @Input() tickets: Ticket[] | { content: Ticket[] } = [];
 
-  ticketIdControl = new FormControl('');
-  dateControl = new FormControl('');
-  timeSpentControl = new FormControl('');
   timeForm: FormGroup;
 
   // Remove hardcoded values
   ticketOptions: string[] = [];
   filteredTicketOptions?: Observable<string[]>;
   today: string;
+  formVisible = true;
 
   constructor(private fb: FormBuilder) {
     // Initialize ticketForm in the constructor
@@ -81,7 +79,7 @@ export class FormComponent implements OnInit, OnChanges {
   }
 
   private setupFilteredOptions() {
-    this.filteredTicketOptions = this.ticketIdControl.valueChanges.pipe(
+    this.filteredTicketOptions = this.timeForm.get('ticketId')!.valueChanges.pipe(
       startWith(''),
       map(value => this._filterTickets(value || ''))
     );
@@ -98,18 +96,37 @@ export class FormComponent implements OnInit, OnChanges {
     event.preventDefault();
 
     const selectedTicket = this.tickets instanceof Array
-      ? this.tickets.find(ticket => `${ticket.ticketId} - ${ticket.name || 'Unnamed'}` === this.ticketIdControl.value)
-      : this.tickets?.content?.find(ticket => `${ticket.ticketId} - ${ticket.name || 'Unnamed'}` === this.ticketIdControl.value);
+      ? this.tickets.find(ticket => `${ticket.ticketId} - ${ticket.name || 'Unnamed'}` === this.timeForm.get('ticketId')!.value)
+      : this.tickets?.content?.find(ticket => `${ticket.ticketId} - ${ticket.name || 'Unnamed'}` === this.timeForm.get('ticketId')!.value);
 
     const data: TimeCard = {
-      date: new Date(this.dateControl.value || ''),
-      timeSpent: Number(this.timeSpentControl.value),
+      date: new Date(this.timeForm.get('date')!.value || ''),
+      timeSpent: Number(this.timeForm.get('timeSpent')!.value),
       ticket: selectedTicket || undefined
     };
 
     this.formDataSubmitted.emit(data);
-    this.ticketIdControl.reset();
-    this.dateControl.reset();
-    this.timeSpentControl.reset();
+    // Reset form values
+    this.formVisible = false;
+
+    setTimeout(() => {
+      // Reset form values
+      this.timeForm.reset({
+        ticketId: '',
+        date: '',
+        timeSpent: ''
+      });
+
+      // Reset control states
+      Object.keys(this.timeForm.controls).forEach(controlName => {
+        const control = this.timeForm.get(controlName);
+        control?.markAsPristine();
+        control?.markAsUntouched();
+        control?.updateValueAndValidity();
+      });
+
+      // Re-show form
+      this.formVisible = true;
+    });
   }
 }

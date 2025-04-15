@@ -18,11 +18,8 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class TicketFormComponent {
   @Output() formDataSubmitted = new EventEmitter<Ticket>();
-
-  nameControl = new FormControl('');
-  descriptionControl = new FormControl('');
   ticketForm: FormGroup;
-
+  formVisible = true;
 
   constructor(private fb: FormBuilder) {
     // Initialize ticketForm in the constructor
@@ -31,17 +28,36 @@ export class TicketFormComponent {
       description: ['', Validators.required],
     });
   }
-  
+
   onSubmit(event: Event) {
     event.preventDefault();
-    
+
     const data: Ticket = {
       name: this.ticketForm.get('name')?.value || '',
       description: this.ticketForm.get('description')?.value || ''
     };
 
     this.formDataSubmitted.emit(data);
-    this.nameControl.reset();
-    this.descriptionControl.reset();
+    // Reset form values
+    this.formVisible = false;
+
+    setTimeout(() => {
+      // Reset form values
+      this.ticketForm.reset({
+        name: '',
+        description: ''
+      });
+
+      // Reset control states
+      Object.keys(this.ticketForm.controls).forEach(controlName => {
+        const control = this.ticketForm.get(controlName);
+        control?.markAsPristine();
+        control?.markAsUntouched();
+        control?.updateValueAndValidity();
+      });
+
+      // Re-show form
+      this.formVisible = true;
+    });
   }
 }
